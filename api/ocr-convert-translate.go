@@ -37,7 +37,6 @@ func Convert(c echo.Context) (err error) {
 	if err != nil {
 		return err
 	}
-	// fmt.Println(dir)
 	defer dst.Close()
 
 	//Copy
@@ -58,12 +57,10 @@ func Convert(c echo.Context) (err error) {
 	}
 
 	textTranslate := &text
-	// fmt.Printf("[EN] English : %s \n", *textTranslate)
 	translated, err := gtranslate.Translate(*textTranslate, language.English, language.Indonesian)
 	if err != nil {
 		log.Println(err)
 	}
-	// fmt.Printf("[ID] Indonesia : %s \n", translated)
 
 	resp.Code = http.StatusOK
 	resp.Message = fmt.Sprintf("File %s uploaded successfully!", img.Filename)
