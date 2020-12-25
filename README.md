@@ -1,2 +1,2 @@
 # go-ocr
-OCR + Translate Project using Golang with tesseract-ocr and gtrnaslate
+OCR + Translate Project using Golang with tesseract-ocr and gtranslate
