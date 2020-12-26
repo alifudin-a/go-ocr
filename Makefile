@@ -12,3 +12,7 @@ pull_master:
 
 push_master:
 	git push origin master
+
+start:
+	make build
+	make exec
