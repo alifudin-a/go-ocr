@@ -48,26 +48,32 @@ func Convert(c echo.Context) (err error) {
 	client := gosseract.NewClient()
 	defer client.Close()
 
+	errResp := map[string]interface{}{
+		"message": "An error occured! Make sure you have internet connection and a clear image file!",
+	}
+
 	imgPath := dir
 
 	client.SetImage(imgPath)
 	text, err := client.Text()
 	if err != nil {
 		log.Println(err)
+		return c.JSON(http.StatusInternalServerError, errResp)
 	}
 
 	textTranslate := &text
 	translated, err := gtranslate.Translate(*textTranslate, language.English, language.Indonesian)
 	if err != nil {
 		log.Println(err)
+		return c.JSON(http.StatusInternalServerError, errResp)
 	}
 
 	resp.Code = http.StatusOK
 	resp.Message = fmt.Sprintf("File %s uploaded successfully!", img.Filename)
 	resp.Data = map[string]interface{}{
-		"image_file":      img.Filename,
-		"image_to_text":   text,
-		"translated_text": translated,
+		"file":       img.Filename,
+		"text":       text,
+		"translated": translated,
 	}
 
 	return c.JSON(http.StatusOK, resp)
