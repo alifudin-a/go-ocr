@@ -15,9 +15,9 @@ import (
 	"golang.org/x/text/language"
 )
 
-// Convert image character to character
+// Convert image included text to character and then translate th output text
 func Convert(c echo.Context) (err error) {
-	var resp res.Response
+	var response res.Response
 
 	img, err := c.FormFile("file")
 	if err != nil {
@@ -48,33 +48,33 @@ func Convert(c echo.Context) (err error) {
 	client := gosseract.NewClient()
 	defer client.Close()
 
-	errResp := map[string]interface{}{
-		"message": "An error occured! Make sure you have internet connection and a clear image file!",
+	errResponse := res.Response{
+		Code:    http.StatusInternalServerError,
+		Message: "An error occured! Make sure you have internet connection and a clear image file!",
 	}
 
 	imgPath := dir
-
 	client.SetImage(imgPath)
 	text, err := client.Text()
 	if err != nil {
 		log.Println(err)
-		return c.JSON(http.StatusInternalServerError, errResp)
+		return c.JSON(http.StatusInternalServerError, errResponse)
 	}
 
 	textTranslate := &text
 	translated, err := gtranslate.Translate(*textTranslate, language.English, language.Indonesian)
 	if err != nil {
 		log.Println(err)
-		return c.JSON(http.StatusInternalServerError, errResp)
+		return c.JSON(http.StatusInternalServerError, errResponse)
 	}
 
-	resp.Code = http.StatusOK
-	resp.Message = fmt.Sprintf("File %s uploaded successfully!", img.Filename)
-	resp.Data = map[string]interface{}{
+	response.Code = http.StatusOK
+	response.Message = fmt.Sprintf("File %s uploaded successfully!", img.Filename)
+	response.Data = map[string]interface{}{
 		"file":       img.Filename,
 		"text":       text,
 		"translated": translated,
 	}
 
-	return c.JSON(http.StatusOK, resp)
+	return c.JSON(http.StatusOK, response)
 }
