@@ -13,6 +13,10 @@ pull_master:
 push_master:
 	git push origin master
 
+image:
+	mkdir -p image/id
+	mkdir -p image/en
+
 start:
 	make build
 	make exec
