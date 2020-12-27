@@ -32,7 +32,7 @@ func ENtoID(c echo.Context) (err error) {
 	defer src.Close()
 
 	// File destination
-	dir := filepath.Join("./image", filepath.Base(img.Filename))
+	dir := filepath.Join("./image/en", filepath.Base(img.Filename))
 	dst, err := os.Create(dir)
 	if err != nil {
 		return err
