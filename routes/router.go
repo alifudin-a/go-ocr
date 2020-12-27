@@ -14,7 +14,8 @@ func Init() *echo.Echo {
 	e.Use(middleware.Recover())
 
 	v1 := e.Group("/api/v1")
-	v1.POST("/convert", api.Convert)
+	v1.POST("/ocr_translate/id", api.IDtoEN)
+	v1.POST("/ocr_translate/en", api.ENtoID)
 
 	return e
 }

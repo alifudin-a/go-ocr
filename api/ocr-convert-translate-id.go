@@ -15,8 +15,8 @@ import (
 	"golang.org/x/text/language"
 )
 
-// Convert image included text to character and then translate th output text
-func Convert(c echo.Context) (err error) {
+// IDtoEN scan and convert image included text to character and then translate the output text
+func IDtoEN(c echo.Context) (err error) {
 	var response res.Response
 
 	img, err := c.FormFile("file")
@@ -62,7 +62,7 @@ func Convert(c echo.Context) (err error) {
 	}
 
 	textTranslate := &text
-	translated, err := gtranslate.Translate(*textTranslate, language.English, language.Indonesian)
+	translated, err := gtranslate.Translate(*textTranslate, language.Indonesian, language.English)
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusInternalServerError, errResponse)
